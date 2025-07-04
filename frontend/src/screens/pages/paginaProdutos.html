@@ -127,7 +127,7 @@
       async function carregarProdutos() {
         const tabela = document.getElementById("tabelaProdutos");
         try {
-          const res = await fetch("http://localhost:3000/materiais");
+          const res = await fetch("http://192.168.100.54:3000/materiais");
           const produtos = await res.json();
           tabela.innerHTML = produtos
             .map(
@@ -166,7 +166,7 @@
         }
 
         try {
-          const res = await fetch("http://localhost:3000/materiais", {
+          const res = await fetch("http://192.168.100.54:3000/materiais", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

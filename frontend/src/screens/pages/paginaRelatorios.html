@@ -81,7 +81,7 @@
     async function carregarRelatorios() {
       try {
         // Vendas
-        const resVendas = await fetch('http://localhost:3000/vendas');
+        const resVendas = await fetch('http://192.168.100.54:3000/vendas');
         const vendas = await resVendas.json();
         document.getElementById('totalVendasRelatorio').textContent = vendas.length;
         const soma = vendas.reduce((acc, v) => acc + parseFloat(v.TOTAL), 0);
@@ -98,7 +98,7 @@
         `).join('');
 
         // Materiais
-        const resMateriais = await fetch('http://localhost:3000/materiais');
+        const resMateriais = await fetch('http://192.168.100.54:3000/materiais');
         const materiais = await resMateriais.json();
         const totalQuantidade = materiais.reduce((acc, m) => acc + parseInt(m.QUANTIDADE), 0);
         const totalValor = materiais.reduce((acc, m) => acc + (parseInt(m.QUANTIDADE) * parseFloat(m.PRECO)), 0);
@@ -106,7 +106,7 @@
         document.getElementById('valorEstoqueRelatorio').textContent = `R$ ${totalValor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
 
         // Funcionários
-        const resUsuarios = await fetch('http://localhost:3000/usuario');
+        const resUsuarios = await fetch('http://192.168.100.54:3000/usuario');
         const usuarios = await resUsuarios.json();
         document.getElementById('quantidadeFuncionariosRelatorio').textContent = usuarios.length;
 

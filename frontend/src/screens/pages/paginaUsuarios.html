@@ -172,7 +172,7 @@
       async function carregarUsuarios() {
         const tabela = document.getElementById("tabelaUsuarios");
         try {
-          const res = await fetch("http://localhost:3000/usuario");
+          const res = await fetch("http://192.168.100.54:3000/usuario");
           const usuarios = await res.json();
           usuariosCache = usuarios;
           tabela.innerHTML = usuarios
@@ -282,7 +282,7 @@
         }
 
         try {
-          const res = await fetch(`http://localhost:3000/usuario/${id}`, {
+          const res = await fetch(`http://192.168.100.54:3000/usuario/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -312,7 +312,7 @@
       async function deletarUsuario(id) {
         if (!confirm("Deseja realmente deletar este usuário?")) return;
         try {
-          const res = await fetch(`http://localhost:3000/usuario/${id}`, {
+          const res = await fetch(`http://192.168.100.54:3000/usuario/${id}`, {
             method: "DELETE",
           });
           if (res.ok) {
@@ -356,7 +356,7 @@
           }
 
           try {
-            const res = await fetch("http://localhost:3000/usuario", {
+            const res = await fetch("http://192.168.100.54:3000/usuario", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
