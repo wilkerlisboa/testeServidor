@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Produtos - Dashboard Papelaria</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../style/dashboardAdmin.css" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-2 sidebar">
+          <h5 class="text-center mb-4">
+            <i class="fa fa-store"></i> Papelaria
+          </h5>
+          <a href="../admin/dashboard.html">Dashboard</a>
+          <a href="./paginaProdutos.html" class="active">Produtos</a>
+          <a href="./paginaUsuarios.html">Usuários</a>
+          <a href="./paginaRelatorios.html">Relatórios</a>
+          <a href="../../index.html" alt="Voltar a tela de Login">Sair</a>
+        </div>
+
+        <div class="col-md-10">
+          <div class="topbar d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Produtos</h4>
+            <div>
+              <i class="fa fa-user"></i> Admin |
+              <a href="#" class="text-white text-decoration-underline">Suporte</a>
+            </div>
+          </div>
+
+          <!-- Formulário para cadastrar produto -->
+          <div class="my-4">
+            <h5>Cadastrar Novo Produto</h5>
+            <form id="formCadastrarProduto" class="row g-3">
+              <div class="col-md-4">
+                <label for="nomeProduto" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nomeProduto" required />
+              </div>
+
+              <div class="col-md-2">
+                <label for="quantidadeProduto" class="form-label">Quantidade</label>
+                <input type="number" class="form-control" id="quantidadeProduto" required min="0" />
+              </div>
+
+              <div class="col-md-3">
+                <label for="localizacaoProduto" class="form-label">Localização</label>
+                <input type="text" class="form-control" id="localizacaoProduto" />
+              </div>
+
+              <div class="col-md-3">
+                <label for="precoProduto" class="form-label">Preço (R$)</label>
+                <input type="number" step="0.01" class="form-control" id="precoProduto" required min="0" />
+              </div>
+
+              <div class="col-md-3">
+                <label for="categoriaProduto" class="form-label">Categoria</label>
+                <input type="text" class="form-control" id="categoriaProduto" required />
+              </div>
+
+              <div class="col-md-3">
+                <label for="marcaProduto" class="form-label">Marca</label>
+                <input type="text" class="form-control" id="marcaProduto" required />
+              </div>
+
+              <div class="col-md-6">
+                <label for="descricaoProduto" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="descricaoProduto" required />
+              </div>
+
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary">Cadastrar Produto</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Tabela de produtos -->
+          <div class="section-title">Produtos em Estoque</div>
+          <div class="table-responsive">
+            <table class="table table-bordered table-sm bg-white">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Nome</th>
+                  <th>Quantidade</th>
+                  <th>Localização</th>
+                  <th>Preço (R$)</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaProdutos"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para mensagens -->
+    <div class="modal fade" id="modalMensagem" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalMensagemTitulo">Mensagem</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body" id="modalMensagemBody"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const modalMensagem = new bootstrap.Modal(document.getElementById("modalMensagem"));
+      const modalTitulo = document.getElementById("modalMensagemTitulo");
+      const modalBody = document.getElementById("modalMensagemBody");
+
+      async function carregarProdutos() {
+        const tabela = document.getElementById("tabelaProdutos");
+        try {
+          const res = await fetch("http://localhost:3000/materiais");
+          const produtos = await res.json();
+          tabela.innerHTML = produtos
+            .map(
+              (p) => `
+                <tr>
+                  <td>${p.ID}</td>
+                  <td>${p.NOME}</td>
+                  <td>${p.QUANTIDADE}</td>
+                  <td>${p.LOCALIZACAO}</td>
+                  <td>R$ ${parseFloat(p.PRECO).toFixed(2).replace(".", ",")}</td>
+                </tr>
+              `
+            )
+            .join("");
+        } catch (err) {
+          tabela.innerHTML =
+            '<tr><td colspan="5" class="text-danger text-center">Erro ao carregar os produtos.</td></tr>';
+        }
+      }
+
+      document.getElementById("formCadastrarProduto").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const nome = document.getElementById("nomeProduto").value.trim();
+        const quantidade = parseInt(document.getElementById("quantidadeProduto").value);
+        const localizacao = document.getElementById("localizacaoProduto").value.trim();
+        const preco = parseFloat(document.getElementById("precoProduto").value);
+        const categoria = document.getElementById("categoriaProduto").value.trim();
+        const marca = document.getElementById("marcaProduto").value.trim();
+        const descricao = document.getElementById("descricaoProduto").value.trim();
+
+        if (!nome || quantidade < 0 || preco < 0 || !categoria || !marca || !descricao) {
+          modalTitulo.textContent = "Erro";
+          modalBody.textContent = "Por favor, preencha todos os campos corretamente.";
+          modalMensagem.show();
+          return;
+        }
+
+        try {
+          const res = await fetch("http://localhost:3000/materiais", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              nome,
+              categoria,
+              quantidade,
+              preco,
+              marca,
+              descricao,
+              localizacao,
+            }),
+          });
+          if (res.ok) {
+            modalTitulo.textContent = "Sucesso";
+            modalBody.textContent = "Produto cadastrado com sucesso!";
+            modalMensagem.show();
+            e.target.reset();
+            carregarProdutos();
+          } else {
+            throw new Error("Erro na resposta do servidor");
+          }
+        } catch (err) {
+          modalTitulo.textContent = "Erro";
+          modalBody.textContent = "Não foi possível cadastrar o produto.";
+          modalMensagem.show();
+        }
+      });
+
+      carregarProdutos();
+    </script>
+  </body>
+</html>
