@@ -64,7 +64,7 @@ form.addEventListener("submit", async (e) => {
 
   // Envia para a API
   try {
-    const response = await fetch("http://localhost:3000/usuario", {
+    const response = await fetch("http://192.168.100.54:3000/usuario", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nome, cpf, rg, endereco, funcao, email, senha }),

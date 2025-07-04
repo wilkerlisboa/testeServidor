@@ -8,7 +8,7 @@ const modalFooter = document.getElementById("modalFuncionarioFooter");
 async function carregarProdutos() {
   const tabela = document.getElementById("tabelaProdutos");
   try {
-    const res = await fetch("http://localhost:3000/materiais");
+    const res = await fetch("http://192.168.100.54:3000/materiais");
     const produtos = await res.json();
     tabela.innerHTML = produtos
       .map(
@@ -32,7 +32,7 @@ async function carregarProdutos() {
 async function carregarFuncionarios() {
   const tabela = document.getElementById("tabelaFuncionarios");
   try {
-    const res = await fetch("http://localhost:3000/usuario");
+    const res = await fetch("http://192.168.100.54:3000/usuario");
     const funcionarios = await res.json();
     funcionariosCache = funcionarios;
 
@@ -60,7 +60,7 @@ async function carregarFuncionarios() {
 
 async function carregarResumo() {
   try {
-    const resVendas = await fetch("http://localhost:3000/vendas");
+    const resVendas = await fetch("http://192.168.100.54:3000/vendas");
     const vendas = await resVendas.json();
     const total = vendas.length;
     const soma = vendas.reduce(
@@ -78,7 +78,7 @@ async function carregarResumo() {
   }
 
   try {
-    const resMateriais = await fetch("http://localhost:3000/materiais");
+    const resMateriais = await fetch("http://192.168.100.54:3000/materiais");
     const materiais = await resMateriais.json();
     const totalQuantidade = materiais.reduce(
       (acc, m) => acc + parseInt(m.QUANTIDADE),
@@ -99,7 +99,7 @@ async function carregarResumo() {
   }
 
   try {
-    const resUsuarios = await fetch("http://localhost:3000/usuario");
+    const resUsuarios = await fetch("http://192.168.100.54:3000/usuario");
     const usuarios = await resUsuarios.json();
     document.getElementById("quantidadeFuncionarios").textContent =
       usuarios.length;
@@ -208,7 +208,7 @@ async function salvarEdicaoFuncionario(id) {
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/usuario/${id}`, {
+    const res = await fetch(`http://192.168.100.54:3000/usuario/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -246,7 +246,7 @@ async function salvarEdicaoFuncionario(id) {
 
   // Exemplo de envio para backend - ajuste conforme sua API
   try {
-    const res = await fetch(`http://localhost:3000/usuario/${id}`, {
+    const res = await fetch(`http://192.168.100.54:3000/usuario/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ NOME: nome, FUNCAO: funcao, EMAIL: email }),
@@ -276,7 +276,7 @@ function deletarFuncionario(id) {
 
 async function confirmarDeletarFuncionario(id) {
   try {
-    const res = await fetch(`http://localhost:3000/usuario/${id}`, {
+    const res = await fetch(`http://192.168.100.54:3000/usuario/${id}`, {
       method: "DELETE",
     });
     if (res.ok) {
