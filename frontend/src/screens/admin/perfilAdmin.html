@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfil do Usuário</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="card shadow p-4">
+      <h3 class="mb-4"><i class="fa fa-user-circle me-2"></i>Perfil do Usuário</h3>
+      <div id="perfilUsuario">
+        <p><strong>ID:</strong> <span id="userId"></span></p>
+        <p><strong>Nome:</strong> <span id="userNome"></span></p>
+        <p><strong>CPF:</strong> <span id="userCpf"></span></p>
+        <p><strong>RG:</strong> <span id="userRg"></span></p>
+        <p><strong>Endereço:</strong> <span id="userEndereco"></span></p>
+        <p><strong>Função:</strong> <span id="userFuncao"></span></p>
+        <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        <p><strong>Senha:</strong> <span id="userSenha"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function carregarPerfil(id = 5) {
+      try {
+        const res = await fetch(`http://localhost:3000/usuario/${id}`);
+        const usuario = await res.json();
+
+        document.getElementById("userId").textContent = usuario.ID;
+        document.getElementById("userNome").textContent = usuario.NOME;
+        document.getElementById("userCpf").textContent = usuario.CPF;
+        document.getElementById("userRg").textContent = usuario.RG;
+        document.getElementById("userEndereco").textContent = usuario.ENDERECO;
+        document.getElementById("userFuncao").textContent = usuario.FUNCAO;
+        document.getElementById("userEmail").textContent = usuario.EMAIL;
+        document.getElementById("userSenha").textContent = usuario.SENHA;
+      } catch (err) {
+        console.error("Erro ao carregar perfil:", err);
+        document.getElementById("perfilUsuario").innerHTML = `
+          <div class="alert alert-danger">Erro ao carregar dados do usuário.</div>
+        `;
+      }
+    }
+
+    carregarPerfil(); // ID padrão = 5
+  </script>
+</body>
+</html>

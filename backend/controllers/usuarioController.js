@@ -1,27 +1,31 @@
 const banco = require("../database/fileDatabase");
+const path = require("path");
 
 // ROTA PARA VER TODOS OS USUARIOS
 exports.getAllUsuarios = (req, res) => {
   const usuarios = banco.prepare(`
-    SELECT * FROM USUARIOS
-  `).all();
+      SELECT * FROM USUARIOS
+      `).all();
   res.json(usuarios);
 };
 
-// ROTA PARA VER UM USUARIO ESPECIFICO
+// ROTA PARA FAZER LOGIN 
 exports.getUsuarioLogin = (req, res) => {
   const { email, senha } = req.body;
   const usuario = banco.prepare(`
     SELECT * FROM USUARIOS WHERE EMAIL = ? AND SENHA = ?
-  `).get(email, senha);
+    `).get(email, senha);
+  // VERIFICA SE USUARIO EXISTE NO BANCO E REDIRECIONA A PAGINA
   if (usuario) {
-    res.json({
-      mensagem: "Usuário encontrado",
-      usuario
-    });
+    console.log("✅ USUÁRIO ENCONTRADO:", usuario);
+    res.sendFile(
+      path.join(__dirname, "..", "..", "frontend", "src", "screens", "admin", "dashboard.html")
+    );
   } else {
+    console.log("❌ USUÁRIO NÃO ENCONTRADO");
     res.status(404).json({ erro: "Usuário não encontrado ou credenciais inválidas" });
   }
+  console.log("⚡ ROTA DE LOGIN ACESSADA");
 };
 
 // ROTA PARA CRIAR UM NOVO USUARIO
@@ -61,7 +65,8 @@ exports.deleteUsuario = (req, res) => {
     res.json({ mensagem: "Usuário deletado com sucesso!" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ erro: "Erro ao deletar usuário. Verifique os vínculos no banco de dados." });
+    res.status(500).json({
+      erro: "Erro ao deletar usuário. Verifique os vínculos no banco de dados.",
+    });
   }
-
 };

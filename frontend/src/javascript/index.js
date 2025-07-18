@@ -5,7 +5,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
   const senha = document.getElementById("senha").value;
 
   try {
-    const response = await fetch("http://192.168.100.54:3000/usuario/login", {
+    const response = await fetch("http://localhost:3000/usuarios/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,10 +23,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     
     // Guarda o nome do usuário no localStorage
     localStorage.setItem("nomeUsuario", data.usuario.NOME);
-    
-    // Redireciona para dashboard.html
-    window.location.href = "./screens/admin/dashboard.html";
-    
+ 
 
   } catch (error) {
     document.getElementById("mensagem").textContent = "Erro ao conectar ao servidor.";
